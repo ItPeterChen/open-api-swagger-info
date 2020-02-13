@@ -1,51 +1,73 @@
 openapi: 3.0.0
 info:
   title: 會員系統
-  contact:    
   version: 1.0.0
 servers:
   -
     url: api-member.sit.kkday.com
+components:
+  parameters:
+    user-uuid:
+      name: user-uuid
+      in: header
+      description: 操作人員
+      required: true
+      schema:
+        type: string
+    locale:
+      name: locale
+      in: header
+      description: 語系
+      required: true
+      schema:
+        type: string
+    X-Api-Key:
+      name: X-Api-Key
+      in: header
+      description: 驗證
+      required: true
+      schema:
+        type: string
+  schemas:
+    response:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            status: 
+              type: string
+              example: '0000'
+            desc: 
+              type: string
+              example: '成功'
+        data:
+          type: object
 paths:
-  /api/v1/coupons/retain:
+  /api/v1/login/token-generate:
     post:
       tags:
-        - coupon
-      summary: 'Coupon - 領取 Retain'
-      operationId: retain
+        - Login/Token
+      summary: 'Token - 產生login token'
+      operationId: token_generate
       parameters:
         -
-          name: user-uuid
-          in: header
-          description: 操作人員
-          required: true
-          schema:
-            type: string
+         $ref : '#/components/parameters/user-uuid'
         -
-          name: locale
-          in: header
-          description: 語系
-          required: true
-          schema:
-            type: string
+         $ref : '#/components/parameters/locale'
         -
-          name: X-Api-Key
-          in: header
-          description: 驗證
-          required: true
-          schema:
-            type: string
+         $ref : '#/components/parameters/X-Api-Key'
         -
-          name: 'memberUuids[]'
+          name: 'memberUuid'
           in: query
-          description: 會員編號列表
+          description: 會員編號
           required: true
           schema:
             type: string
         -
-          name: coupon
+          name: loginChannel
           in: query
-          description: coupon
+          description: 登入的channel
           required: true
           schema:
             type: string
@@ -55,7 +77,38 @@ paths:
           content:
             application/json:
               schema:
-                example:
-                  metadata: { status: '0000', desc: 領取成功 }
-                  data: { coupon: SGWATSONSW14I7, results: [{ memberUuid: aaaaaaaa-d5f8-4e16-a636-19000565bcb7, code: '0000', message: 領取成功 }, { memberUuid: bbbbbbbb-d5f8-4e16-a636-19000565bcb7, code: '0000', message: 領取成功 }] }
-  
+                $ref: '#/components/schemas/response'
+              example:
+                metadata: { status: '0000', desc: 產生成功 }
+                data: { loginToken : 'fasfllmvldsfaldsjffdasdf'}
+  /api/v1/login/token-validate:
+    post:
+      tags:
+        - Login/Token
+      summary: 'Token - 驗證login token'
+      operationId: token_validate
+      parameters:
+        -
+         $ref : '#/components/parameters/user-uuid'
+        -
+         $ref : '#/components/parameters/locale'
+        -
+         $ref : '#/components/parameters/X-Api-Key'
+        -
+          name: 'loginToken'
+          in: query
+          description: 登入token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response'
+              example:
+                metadata: { status: '0000', desc: 驗證成功 }
+                data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', channel : 'KKDAY_IN_APP'}
+
