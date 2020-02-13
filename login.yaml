@@ -21,13 +21,6 @@ components:
       required: true
       schema:
         type: string
-    X-Api-Key:
-      name: X-Api-Key
-      in: header
-      description: 驗證
-      required: true
-      schema:
-        type: string
   schemas:
     response:
       type: object
@@ -55,8 +48,6 @@ paths:
          $ref : '#/components/parameters/user-uuid'
         -
          $ref : '#/components/parameters/locale'
-        -
-         $ref : '#/components/parameters/X-Api-Key'
         -
           name: 'memberUuid'
           in: query
@@ -93,8 +84,6 @@ paths:
         -
          $ref : '#/components/parameters/locale'
         -
-         $ref : '#/components/parameters/X-Api-Key'
-        -
           name: 'loginToken'
           in: query
           description: 登入token
@@ -111,4 +100,3 @@ paths:
               example:
                 metadata: { status: '0000', desc: 驗證成功 }
                 data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', channel : 'KKDAY_IN_APP'}
-
