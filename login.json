@@ -1,0 +1,1066 @@
+<html>
+<body>
+openapi: 3.0.0
+info:
+  title: 點數系統
+  contact:
+    name: Kim.Hung
+    email: kim.hung@kkday.com
+  version: 1.0.0
+servers:
+  -
+    url: api-member.sit.kkday.com
+paths:
+  /api/v1/coupons/retain:
+    post:
+      tags:
+        - coupon
+      summary: 'Coupon - 領取 Retain'
+      operationId: retain
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: 'memberUuids[]'
+          in: query
+          description: 會員編號列表
+          required: true
+          schema:
+            type: string
+        -
+          name: coupon
+          in: query
+          description: coupon
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: 領取成功 }
+                  data: { coupon: SGWATSONSW14I7, results: [{ memberUuid: aaaaaaaa-d5f8-4e16-a636-19000565bcb7, code: '0000', message: 領取成功 }, { memberUuid: bbbbbbbb-d5f8-4e16-a636-19000565bcb7, code: '0000', message: 領取成功 }] }
+  /api/v1/member/checkMemberStatusType:
+    post:
+      tags:
+        - member
+      summary: '會員 - 會員Coupon領取狀態檢查'
+      operationId: checkMemberStatusType
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: memberStatus
+          in: query
+          description: '檢查狀態類型 BIRT - 生日禮 NCFP - 新客禮 GERN - 一般'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: [{ status: BIRT, isMatch: false }, { status: NCFP, isMatch: false }, { status: GERN, isMatch: true }]
+  /api/v1/member/transform/risk:
+    post:
+      tags:
+        - member
+      summary: '會員 - 會員風險狀態變更'
+      operationId: transform/risk
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuids
+          in: query
+          description: 會員編號陣列
+          required: true
+          schema:
+            type: string
+        -
+          name: riskStatus
+          in: query
+          description: 風險狀態
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: MM02, desc: 會員風控狀態更新錯誤 }
+                  data: { failUuids: [8c600db5-1fe2-44e6-a391-e25e8a004e43] }
+  /api/v1/member/getMemberDataForHeader:
+    post:
+      tags:
+        - member
+      summary: '會員 - 取得Header所需會員資訊'
+      operationId: getMemberDataForHeader
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: memberDataTypeList
+          in: query
+          description: '要取得的會員資料類型 ALL/COUPON/POINT/MESSAGE'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { pointCount: 6653, couponCount: 0, unreadMsgCount: 207, unreadMsgCountList: { UPCOMING: 161, CANCELLED: 0, DEPARTED: 2, PRODUCT: 20 } }
+  /api/v1/points/manaulAddPoints:
+    post:
+      tags:
+        - points
+      summary: '點數 - 人工贈點'
+      operationId: manaulAddPoints
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: pointsQty
+          in: query
+          description: 入點點數
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/points/getPointRules:
+    get:
+      tags:
+        - points
+      summary: '點數 - 點數規則查詢'
+      operationId: getPointRules
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: ruleTypeList
+          in: query
+          description: '規則類型 BD - 生日禮 FT - 首購禮 UD - 會員禮'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { ruleList: [{ ruleType: BD, pointsQty: 10 }, { ruleType: FT, pointsQty: 10 }] }
+  /api/v1/points/checkAddPoints:
+    get:
+      tags:
+        - points
+      summary: '點數 - 點數規則資格檢查'
+      operationId: checkAddPoints
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: ruleTypeList
+          in: query
+          description: '規則類型 BD - 生日禮 FT - 首購禮 UD - 會員禮'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { ruleList: [{ ruleType: BD, isReceived: false, result: '0000', msg: '' }, { ruleType: FT, isReceived: false, result: MP11, msg: 首購訂單未成立 }] }
+  /api/v1/points/addPoints:
+    post:
+      tags:
+        - points
+      summary: '點數 - 加點'
+      operationId: addPoints
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: orderOid
+          in: query
+          description: '訂單編號*ruleType = OD 必填'
+          required: false
+          schema:
+            type: string
+        -
+          name: priceTotal
+          in: query
+          description: '訂單總金額（美金）*ruleType = OD 必填'
+          required: false
+          schema:
+            type: string
+        -
+          name: ruleType
+          in: query
+          description: '規則類型 BD - 生日禮 FT - 首購禮 UD - 會員禮 OD - 訂單成立'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/points/deductPointsByOrder:
+    post:
+      tags:
+        - points
+      summary: '點數 - 訂單交易取消'
+      operationId: deductPointsByOrder
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: orderOid
+          in: query
+          description: 訂單編號
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/points/manaulDeductPoints:
+    post:
+      tags:
+        - points
+      summary: '點數 - 人工扣點'
+      operationId: manaulDeductPoints
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: pointsQty
+          in: query
+          description: 扣點點數
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/points/getPointsByOrder:
+    get:
+      tags:
+        - points
+      summary: '點數 - 訂單點數查詢'
+      operationId: getPointsByOrder
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: orderOid
+          in: query
+          description: 訂單編號
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { pointsQtyTotal: 0, rewardPointsQtyTotal: 541, deductPointsQtyTotal: -541, pointsList: [{ ruleName: '1:PR:PP:UL:2規則', pointsQty: 501 }, { ruleName: '2:PR:PQ:YR:2規則', pointsQty: 10 }, { ruleName: '3:PR:PQ:MH:2規則', pointsQty: 10 }, { ruleName: '4:PR:PQ:SS:2規則', pointsQty: 10 }, { ruleName: '5:PR:PQ:MY:2規則', pointsQty: 10 }, { ruleName: 訂單取消, pointsQty: -541 }] }
+  /api/v1/points/getInfo:
+    get:
+      tags:
+        - points
+      summary: '點數 - 查詢點數來往資料'
+      operationId: getPointsInfoByMember
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: infoType
+          in: query
+          description: 'ALL : 全部 REWARD：入點 DEDUCT：扣點 PRODUCT : 兌換商品'
+          required: true
+          schema:
+            type: string
+        -
+          name: actionType
+          in: query
+          description: '動作類型 CSA - 點數調整 BD - 生日禮 FT - 首購禮 OD - 訂單成立 UD - 會員禮 OX - 訂單取消 RP - 兌換禮品 EX - 點數過期 CSD - 點數調整 ACT - 活動贈點'
+          required: false
+          schema:
+            type: string
+        -
+          name: createDateBeg
+          in: query
+          description: 建立日期（起）
+          required: false
+          schema:
+            type: string
+        -
+          name: createDateEnd
+          in: query
+          description: 建立日期（迄）
+          required: false
+          schema:
+            type: string
+        -
+          name: currentPage
+          in: query
+          description: 頁數，預設第1頁
+          required: false
+          schema:
+            type: string
+        -
+          name: pageSize
+          in: query
+          description: 預設20筆，最多不可超過50個
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { pointsBalance: 96, pointsListTotal: 7, pointsList: [{ createDate: '2018-11-13 03:41:46', pointsQty: -10, pointsValidDateEnd: null, actionCategory: 點數過期, note: null, orderProduct: null, redeemProduct: { redeemProductOid: 8, redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }, { createDate: '2018-11-12 09:17:51', pointsQty: -10, pointsValidDateEnd: null, actionCategory: 兌換禮品, note: null, orderProduct: null, redeemProduct: null }, { createDate: '2018-11-12 08:53:58', pointsQty: 10, pointsValidDateEnd: '2019-09-30', actionCategory: 訂單成立, note: null, orderProduct: { orderMid: 18KK092567005 }, redeemProduct: { redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }, { createDate: '2018-11-12 08:53:58', pointsQty: 10, pointsValidDateEnd: '2019-09-30', actionCategory: 訂單成立, note: null, orderProduct: { orderMid: 18KK092567005 }, redeemProduct: { redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }, { createDate: '2018-11-12 08:53:58', pointsQty: 10, pointsValidDateEnd: '2019-09-30', actionCategory: 訂單成立, note: null, orderProduct: { orderMid: 18KK092567005 }, redeemProduct: { redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }, { createDate: '2018-11-12 08:53:58', pointsQty: 10, pointsValidDateEnd: '2017-09-30', actionCategory: 訂單成立, note: null, orderProduct: { orderMid: 18KK092567005 }, redeemProduct: { redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }, { createDate: '2018-11-12 08:53:58', pointsQty: 76, pointsValidDateEnd: '2019-09-30', actionCategory: 訂單成立, note: null, orderProduct: { orderMid: 18KK092567005 }, redeemProduct: { redeemProductCode: '11111', redeemProductValidDateBeg: '2018-10-01', redeemProductValidDateEnd: '2019-10-01' } }] }
+  /api/v1/points/calculatePointsByOrder:
+    get:
+      tags:
+        - points
+      summary: '點數 - 預估訂單可得點數'
+      operationId: calculatePointsByOrder
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: price
+          in: query
+          description: 訂單應收金額（扣除coupon）
+          required: true
+          schema:
+            type: string
+        -
+          name: currency
+          in: query
+          description: 幣別
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { pointsList: [{ ruleName: '5:PR:PQ:MY:2規則', pointsQty: 10 }, { ruleName: '4:PR:PQ:SS:2規則', pointsQty: 10 }, { ruleName: '3:PR:PQ:MH:2規則', pointsQty: 10 }, { ruleName: '2:PR:PQ:YR:2規則', pointsQty: 10 }, { ruleName: '1:PR:PP:UL:2規則', pointsQty: 35 }] }
+  /api/v1/points/expirePoints:
+    post:
+      tags:
+        - points
+      summary: '點數 - 逾期'
+      operationId: expirePoints
+      parameters:
+        -
+          name: expireDate
+          in: query
+          description: '過期日期未填則用昨天 * 撈出valid_end_date'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { run: { memoryPeakUsage: 9.57MB\n, memberCount: 0, rewardCount: 0 } }
+  /api/v1/points/addPointsBatch:
+    post:
+      tags:
+        - points
+      summary: '點數 - 批次點數調整(新增扣點)'
+      operationId: addPointsBatch
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: batchName
+          in: query
+          description: 點數批次名稱
+          required: true
+          schema:
+            type: string
+        -
+          name: batchList
+          in: query
+          description: 點數批次列表
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { batchOid: 97 }
+  /api/v1/redeem/getRedeemProductsByCountry:
+    get:
+      tags:
+        - redeem
+      summary: '兌換商品 - 查詢'
+      operationId: getRedeemProductsByCountry
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: countryCd
+          in: query
+          description: 商品顯示市場國家
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { redeemProductList: [{ productName: 中文, redeemProductOid: 2, redeemRemainQty: 0, redeemQtyTotal: 4, redeemPoints: 10, country: Taiwan, city: Taipei, productImgUrl: 'http:\/\/img.default.tw' }, { productName: 中文, redeemProductOid: 3, redeemRemainQty: 3, redeemQtyTotal: 4, redeemPoints: 15, country: Taiwan, city: Taipei, productImgUrl: 'http:\/\/img.default.tw' }, { productName: 品牌名稱品牌名稱品牌名稱品牌名稱品牌名稱品牌名稱品上限三十字, redeemProductOid: 4, redeemRemainQty: 4, redeemQtyTotal: 4, redeemPoints: 5, country: Taiwan, city: Taipei, productImgUrl: 'https:\/\/demo-web-pc.sit.kkday.com\/img\/demo\/gift01.jpg' }], redeemProductTotal: 92 }
+  /api/v1/redeem/getRedeemProductInfo:
+    get:
+      tags:
+        - redeem
+      summary: '兌換商品 - 單一商品詳細資料'
+      operationId: getRedeemProductInfo
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: redeemProductOid
+          in: query
+          description: 兌換商品編號
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { redeemProduct: { redeemProductOid: 2, redeemPoints: 10, redeemRemainQty: 0, redeemQtyTotal: 4, guideLang: \u4e2d\u6587, productName: \u4e2d\u6587, productDesc: \u4e2d\u6587tw, address: \u4e2d\u6587tw, productImgUrl: 'http:\/\/img.default.tw', validDateBeg: '2018-11-10', validDateEnd: '2019-11-10', isPublished: true } }
+  /api/v1/redeem/checkRedeemProduct:
+    get:
+      tags:
+        - redeem
+      summary: '兌換商品 - 檢查兌換資格'
+      operationId: checkRedeemProduct
+      parameters:
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: redeemProductOid
+          in: query
+          description: 兌換商品編號
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/redeem/redeemProduct:
+    post:
+      tags:
+        - redeem
+      summary: '兌換商品 - 商品兌換'
+      operationId: redeemProduct
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: memberUuid
+          in: query
+          description: 會員編號
+          required: true
+          schema:
+            type: string
+        -
+          name: redeemProductOid
+          in: query
+          description: 兌換商品編號
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: { redeemProduct: { redeemCode: '3333333333' } }
+  /api/v1/redeem/importRedeemProduct:
+    post:
+      tags:
+        - redeem
+      summary: '兌換商品 - 商品匯入'
+      operationId: importRedeemProduct
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/sms/sendCode:
+    post:
+      tags:
+        - sms
+      summary: '寄送驗證碼 API'
+      operationId: sendCode
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: countryCode
+          in: query
+          description: '國碼 +886'
+          required: true
+          schema:
+            type: string
+        -
+          name: phone
+          in: query
+          description: '電話號碼 0911111111'
+          required: true
+          schema:
+            type: string
+        -
+          name: expireSecond
+          in: query
+          description: '過期期限(秒) defualt: 60'
+          required: false
+          schema:
+            type: integer
+        -
+          name: checkMax
+          in: query
+          description: '驗證次數 default: 3'
+          required: false
+          schema:
+            type: integer
+        -
+          name: ipAddress
+          in: query
+          description: 使用者來源ip
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+  /api/v1/sms/verifyCode:
+    post:
+      tags:
+        - sms
+      summary: '驗證碼檢查 API'
+      operationId: verifyCode
+      parameters:
+        -
+          name: user-uuid
+          in: header
+          description: 操作人員
+          required: true
+          schema:
+            type: string
+        -
+          name: locale
+          in: header
+          description: 語系
+          required: true
+          schema:
+            type: string
+        -
+          name: X-Api-Key
+          in: header
+          description: 驗證
+          required: true
+          schema:
+            type: string
+        -
+          name: countryCode
+          in: query
+          description: '國碼 +886'
+          required: true
+          schema:
+            type: string
+        -
+          name: phone
+          in: query
+          description: '電話號碼 0911111111'
+          required: true
+          schema:
+            type: string
+        -
+          name: verifyCode
+          in: query
+          description: '驗證碼 (6碼)'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  metadata: { status: '0000', desc: success }
+                  data: null
+</body>
+</html>
