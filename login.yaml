@@ -56,9 +56,9 @@ paths:
           schema:
             type: string
         -
-          name: loginChannel
+          name: loginId
           in: query
-          description: 登入的channel
+          description: 登入取得的loginId
           required: true
           schema:
             type: string
@@ -99,4 +99,4 @@ paths:
                 $ref: '#/components/schemas/response'
               example:
                 metadata: { status: '0000', desc: 驗證成功 }
-                data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', channel : 'KKDAY_IN_APP'}
+                data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', loginId : 'kk123@kkday.com'}
