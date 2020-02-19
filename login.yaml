@@ -90,8 +90,7 @@ paths:
           required: true
           schema:
             type: string
-          example:
-            {loginToken : 'fasfllmvldsfaldsjffdasdf'}
+            example: "fasfllmvldsfaldsjffdasdf"
       responses:
         '200':
           description: OK
