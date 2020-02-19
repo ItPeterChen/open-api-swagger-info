@@ -85,11 +85,13 @@ paths:
          $ref : '#/components/parameters/locale'
         -
           name: 'loginToken'
-          in: query
+          in: formData
           description: 登入token
           required: true
           schema:
             type: string
+          example:
+            {loginToken : 'fasfllmvldsfaldsjffdasdf'}
       responses:
         '200':
           description: OK
