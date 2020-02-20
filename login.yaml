@@ -33,7 +33,7 @@ components:
               example: '0000'
             desc: 
               type: string
-              example: '成功'
+              example: 'success'
         data:
           type: object
 paths:
@@ -70,8 +70,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/response'
               example:
-                metadata: { status: '0000', desc: 產生成功 }
-                data: { loginToken : 'fasfllmvldsfaldsjffdasdf'}
+                成功範例:
+                  metadata: { status: '0000', desc: 'success' }
+                  data: { loginToken : 'fasfllmvldsfaldsjffdasdf'}
+                錯誤ML01範例:
+                  metadata: { status: 'ML01', desc: 'token cache save failed' }
+                  data : {}
   /api/v1/login/token-validate:
     post:
       tags:
@@ -99,5 +103,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/response'
               example:
-                metadata: { status: '0000', desc: 驗證成功 }
-                data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', loginId : 'kk123@kkday.com'}
+                成功範例:
+                  metadata: { status: '0000', desc: 'success' }
+                  data: { memberUuid : 'fasfllmvldsfaldsjffdasdf', loginId : 'kk123@kkday.com'}
+                錯誤ML02範例:
+                  metadata: { status: 'ML02', desc: 'token cache get failed' }
+                  data : {}
+                錯誤ML03範例:
+                  metadata: { status: 'ML03', desc: 'token validate failed' }
+                  data : {}
