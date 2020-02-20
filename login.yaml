@@ -64,7 +64,8 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: 產生token response，<br />錯誤類型有：<br />
+            ML01：token cache save failed(token cache 儲存失敗)
           content:
             application/json:
               schema:
@@ -97,7 +98,9 @@ paths:
             example: "fasfllmvldsfaldsjffdasdf"
       responses:
         '200':
-          description: OK
+          description: 驗證token response，<br />錯誤類型有：<br />
+            ML02：token cache get failed(token cache 讀取失敗),<br />
+            ML03：token validate failed(token 驗證失敗)
           content:
             application/json:
               schema:
